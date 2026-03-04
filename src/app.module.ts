@@ -5,6 +5,7 @@ import { EpisodesModule } from './episodes/episodes.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm/dist/typeorm.module';
 import { TopicsModule } from './topics/topics.module';
+import { Topic } from './topics/entities/topic.entity';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { TopicsModule } from './topics/topics.module';
       username: process.env.DATABASE_USER || 'adminuser',
       password: process.env.DATABASE_PASSWORD || 'admin1234',
       database: process.env.DATABASE_NAME || 'example_db',
-      entities: [],
+      entities: [Topic],
       synchronize: true, // solo en desarrollo
     }),
     EpisodesModule, 
