@@ -1,9 +1,11 @@
-import { Body, Controller, DefaultValuePipe, Get, HttpException, HttpStatus, Param, ParseIntPipe, Post, Query } from '@nestjs/common';
+import { Body, Controller, DefaultValuePipe, Get, HttpException, HttpStatus, Param, ParseIntPipe, Post, Query, UseGuards, ValidationPipe } from '@nestjs/common';
 import { EpisodesService } from './episodes.service';
 import { CreateEpisodeDto } from './dto/create-episode.dto';
 import { ConfigService } from '../config/config.service';
 import { IsPositivePipe } from './pipes/is-positive.pipe';
+import { ApiKeyGuard } from './guards/api-key.guard';
 
+@UseGuards(ApiKeyGuard)
 @Controller('episodes')
 export class EpisodesController {
 
@@ -22,7 +24,7 @@ export class EpisodesController {
     findFeatured() {
         return this.episodesService.findFeatured();
     }
-
+    // add guard to protect this endpoint: @UseGuards(ApiKeyGuard)
     @Get(':id')
     async findOne(@Param('id') id: string) {
         const episode = await this.episodesService.findOne(id);
@@ -33,7 +35,7 @@ export class EpisodesController {
         return episode;
     }
     @Post()
-    create(@Body() input: CreateEpisodeDto) {
+    create(@Body(ValidationPipe) input: CreateEpisodeDto) {
         return this.episodesService.create(input)
     }
 }
